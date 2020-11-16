@@ -5,6 +5,10 @@
 */target/**
 **/META-INF/
 !.mvn/wrapper/maven-wrapper.jar
+/reports/
+*/reports/**
+/test-output/
+*/test-output/**
 
 ### STS ###
 .apt_generated

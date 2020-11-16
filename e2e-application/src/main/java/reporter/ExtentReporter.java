@@ -6,6 +6,7 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,20 +21,21 @@ public class ExtentReporter {
     @Getter
     private final ExtentReports extentReports;
 
-    private ExtentReporter() {
-        ExtentSparkReporter extentSparkReporter = new ExtentSparkReporter("./reports/extent.html");
+    private ExtentReporter(String browser) {
+        ExtentSparkReporter extentSparkReporter = new ExtentSparkReporter("./reports/" +
+                ReporterUtils.generateReportName() + ".html");
         extentSparkReporter.config().setEncoding("utf-8");
         extentSparkReporter.config().setDocumentTitle("Automation Report");
         extentSparkReporter.config().setReportName("Automation Test Results");
         extentSparkReporter.config().setTheme(Theme.DARK);
         extentReports = new ExtentReports();
-        extentReports.setSystemInfo("Browser", "Chrome");
+        extentReports.setSystemInfo("Browser", StringUtils.capitalize(browser));
         extentReports.attachReporter(extentSparkReporter);
     }
 
-    public static ExtentReporter getInstance() {
+    public static ExtentReporter getInstance(String browser) {
         if(extentReporter == null)
-            extentReporter = new ExtentReporter();
+            extentReporter = new ExtentReporter(browser);
         return extentReporter;
     }
 

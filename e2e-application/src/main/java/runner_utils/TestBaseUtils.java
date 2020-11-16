@@ -1,6 +1,6 @@
 package runner_utils;
 
-import driver_utils.ExtendedWebDriver;
+import org.openqa.selenium.WebDriver;
 
 public abstract class TestBaseUtils {
 
@@ -8,7 +8,7 @@ public abstract class TestBaseUtils {
         return String.format("%s", WebsiteConfiguration.BASE_URL);
     }
 
-    public static void NavigateToBaseUrl(ExtendedWebDriver extendedWebDriver) {
-        extendedWebDriver.getDriver().get(getBaseUrl());
+    public static void NavigateToBaseUrl(WebDriver webDriver) {
+        webDriver.get(getBaseUrl());
     }
 }

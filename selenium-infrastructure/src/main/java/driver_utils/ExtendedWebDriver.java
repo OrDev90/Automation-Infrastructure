@@ -22,7 +22,7 @@ public abstract class ExtendedWebDriver {
 
     @Getter
     @Setter
-    private String browserName;
+//    private String browserName;
     private CustomBy customBy;
 
     protected void initExtendedDriverTools(WebDriver webDriver) {

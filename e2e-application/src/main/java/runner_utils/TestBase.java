@@ -2,7 +2,6 @@ package runner_utils;
 
 import driver_utils.DriverFactory;
 import driver_utils.ExtendedWebDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.*;
 import pages.homepage.HomePage;
@@ -18,9 +17,9 @@ public abstract class TestBase extends TestBaseUtils {
     protected HomePage homePage;
 
     @BeforeSuite
-    public void beforeSuite() {
+    public void beforeSuite(ITestContext context) {
         System.out.println("****************** Suite Started ******************");
-        extentReporter = ExtentReporter.getInstance();
+        extentReporter = ExtentReporter.getInstance(context.getCurrentXmlTest().getParameter("browser"));
         WebsiteConfiguration.initConfiguration();
     }
 
@@ -33,14 +32,15 @@ public abstract class TestBase extends TestBaseUtils {
 
     @BeforeMethod
     public void beforeMethod(ITestContext context) {
-        this.extentReporter.createTest(context.getAllTestMethods()[extentReporter.getExtentTestList().size()].getMethodName(),
+        this.extentReporter.createTest(context.getAllTestMethods()[extentReporter.getExtentTestList().size()].getMethodName() + "-" +
+                        context.getAllTestMethods()[extentReporter.getExtentTestList().size()].getGroups()[0],
                 context.getAllTestMethods()[extentReporter.getExtentTestList().size()].getDescription());
         System.out.println("****************** Method Started ******************");
         String browser = context.getCurrentXmlTest().getParameter("browser");
         boolean isHeadless = Boolean.parseBoolean(context.getCurrentXmlTest().getParameter("headless"));
         startBrowser(browser, isHeadless);
         this.customAssert = new CustomAssert(this.driverManager, this.extentReporter);
-        NavigateToBaseUrl(getTestDriverManager());
+        NavigateToBaseUrl(getTestDriverManager().getDriver());
         initAllPages();
     }
 
@@ -61,8 +61,8 @@ public abstract class TestBase extends TestBaseUtils {
     private void startBrowser(String browser, boolean isHeadless) {
         this.driverManager = DriverFactory.getDriverManager(browser, isHeadless);
         this.driverManager.initDriver(browser);
-        RemoteWebDriver remoteWebDriver = (RemoteWebDriver) this.driverManager.getDriver();
-        this.driverManager.setBrowserName(remoteWebDriver.getCapabilities().getBrowserName());
+//        RemoteWebDriver remoteWebDriver = (RemoteWebDriver) this.driverManager.getDriver();
+//        this.driverManager.setBrowserName(remoteWebDriver.getCapabilities().getBrowserName());
         this.driverManager.getDriver().manage().window().maximize();
     }
 

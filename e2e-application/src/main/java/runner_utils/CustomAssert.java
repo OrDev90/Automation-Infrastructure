@@ -37,18 +37,30 @@ public class CustomAssert {
     }
 
     public String getText(String message, WebElement element) {
-        info(message);
-        return this.driverManager.getTextFromElement(element);
+        String text = this.driverManager.getTextFromElement(element);
+        if(!text.contentEquals(""))
+            pass(message);
+        else
+            fail(message);
+        return text;
     }
 
     public String getText(String message, CustomBy givenElementAttribute) {
-        info(message);
-        return this.driverManager.getTextFromElement(givenElementAttribute);
+        String text = this.driverManager.getTextFromElement(givenElementAttribute);
+        if(!text.contentEquals(""))
+            pass(message);
+        else
+            fail(message);
+        return text;
     }
 
     public String getText(String message, CustomBy givenElementAttribute, WebElement fromElement) {
-        info(message);
-        return this.driverManager.getTextFromElement(givenElementAttribute, fromElement);
+        String text = this.driverManager.getTextFromElement(givenElementAttribute, fromElement);
+        if(!text.contentEquals(""))
+            pass(message);
+        else
+            fail(message);
+        return text;
     }
 
 }
