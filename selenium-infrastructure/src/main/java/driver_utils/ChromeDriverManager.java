@@ -32,7 +32,7 @@ public class ChromeDriverManager extends ExtendedWebDriver {
                 if (SystemUtils.IS_OS_WINDOWS) {
                     chromeDriverService = new ChromeDriverService.Builder()
                             .usingDriverExecutable(new File(System
-                                    .getProperty("user.dir") + "\\selenium-infrastructure\\src\\main\\java\\drivers\\chromedriver.exe"))
+                                    .getProperty("user.dir") + "\\..\\selenium-infrastructure\\src\\main\\java\\drivers\\chromedriver.exe"))
                             .usingAnyFreePort()
                             .build();
                 }

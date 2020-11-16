@@ -26,7 +26,7 @@ public class FirefoxDriverManager extends ExtendedWebDriver {
                 if (SystemUtils.IS_OS_WINDOWS) {
                     geckoDriverService = new GeckoDriverService.Builder()
                             .usingDriverExecutable(new File(System
-                                    .getProperty("user.dir") + "\\selenium-infrastructure\\src\\main\\java\\drivers\\geckodriver.exe"))
+                                    .getProperty("user.dir") + "\\..\\selenium-infrastructure\\src\\main\\java\\drivers\\geckodriver.exe"))
                             .usingAnyFreePort()
                             .build();
                 }

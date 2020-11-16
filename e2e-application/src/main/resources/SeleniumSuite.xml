@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Selenium Suite" verbose="1" configfailurepolicy="continue">
+    <parameter name="headless" value="false"/>
+    <test name="Selenium Test">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name="runner.Scenarios"/>
+        </classes>
+    </test>
+</suite>
