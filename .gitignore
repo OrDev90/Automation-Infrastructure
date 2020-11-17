@@ -1,0 +1,4 @@
+/.idea/
+/e2e-application/target/
+/selenium-infrastructure/target/
+/test-output/
