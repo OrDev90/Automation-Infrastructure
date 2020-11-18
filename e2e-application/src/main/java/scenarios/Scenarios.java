@@ -69,7 +69,7 @@ public class Scenarios extends TestBase {
     }
 
     @Test(description = "In example projects, verify that the first purple circle is selected, click right arrow, " +
-            "verify that all picture have changed, click right arrow until all former pictures have returned", groups = {"Sanity"})
+            "verify that all images have changed, click right arrow until the initial image has returned", groups = {"Sanity"})
     public void scenario4() {
         homePage.verify().thatSlickDotIsActive(0);
         homePage.verify().thatSliderShowCorrectImages(0);
@@ -85,9 +85,12 @@ public class Scenarios extends TestBase {
         homePage.act().clickSliderRightArrow();
         homePage.verify().thatSlickDotIsActive(4);
         homePage.verify().thatSliderShowCorrectImages(4);
+        homePage.act().clickSliderRightArrow();
+        homePage.verify().thatSlickDotIsActive(0);
+        homePage.verify().thatSliderShowCorrectImages(0);
     }
 
-    @Test(description = "In the bottom form, click the button and verify that all field are mandatory" , groups = {"Negative"})
+    @Test(description = "In the bottom form, click the button and verify that all fields are mandatory" , groups = {"Negative"})
     public void scenario5() {
         homePage.act().clickContactButton();
         homePage.verify().thatErrorMessageHasAppearedForNameField();
@@ -139,7 +142,7 @@ public class Scenarios extends TestBase {
         homePage.verify().thatPageYOffsetIs("0");
     }
 
-    @Test(description = "Insert bottom form inputs and click the send button" , groups = {"Sanity"})
+    @Test(description = "Fill bottom form inputs and click the send button" , groups = {"Sanity"})
     public void scenario8() {
         homePage.act().sendTextToContactName(StringUtils.generateRandomName());
         homePage.act().sendTextToContactCompany(StringUtils.generateRandomStringInLength(8));

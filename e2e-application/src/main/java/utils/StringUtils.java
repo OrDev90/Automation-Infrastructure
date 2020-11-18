@@ -2,7 +2,6 @@ package utils;
 
 import net.bytebuddy.utility.RandomString;
 
-import java.time.LocalDate;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 

@@ -61,8 +61,6 @@ public abstract class TestBase extends TestBaseUtils {
     private void startBrowser(String browser, boolean isHeadless) {
         this.driverManager = DriverFactory.getDriverManager(browser, isHeadless);
         this.driverManager.initDriver(browser);
-//        RemoteWebDriver remoteWebDriver = (RemoteWebDriver) this.driverManager.getDriver();
-//        this.driverManager.setBrowserName(remoteWebDriver.getCapabilities().getBrowserName());
         this.driverManager.getDriver().manage().window().maximize();
     }
 

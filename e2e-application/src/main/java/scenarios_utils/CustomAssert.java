@@ -1,12 +1,20 @@
 package scenarios_utils;
 
+import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.model.Media;
 import driver_utils.CustomBy;
 import driver_utils.ExtendedWebDriver;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
 import reporter.ExtentReporter;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 public class CustomAssert {
@@ -23,8 +31,19 @@ public class CustomAssert {
         if(isSuccess)
             pass(message);
         else
-            fail(message);
-//            Assert.fail();
+            fail(message, takeScreenshot());
+    }
+
+    private Media takeScreenshot() {
+        File scp = ((TakesScreenshot) this.driverManager.getDriver()).getScreenshotAs(OutputType.FILE);
+        try {
+            final byte[] bytes = FileUtils.readFileToByteArray(scp);
+            String base64 = Base64.getEncoder().encodeToString(bytes);
+            return MediaEntityBuilder.createScreenCaptureFromBase64String(base64).build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private void info(String message) {
@@ -43,8 +62,8 @@ public class CustomAssert {
         this.extentReporter.log(Status.SKIP, message);
     }
 
-    private void fail(String message) {
-        this.extentReporter.log(Status.FAIL, message);
+    private void fail(String message, Media media) {
+        this.extentReporter.log(Status.FAIL, message, media);
     }
 
     public void click(WebElement element, String message) {

@@ -5,11 +5,7 @@
     <test name="Selenium Test" group-by-instances="true">
         <parameter name="browser" value="chrome"/>
         <classes>
-            <class name="scenarios.Scenarios">
-                <methods>
-                    <include name="scenario2"/>
-                </methods>
-            </class>
+            <class name="scenarios.Scenarios"/>
         </classes>
     </test>
 </suite>
