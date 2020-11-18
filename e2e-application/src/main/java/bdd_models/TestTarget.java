@@ -1,6 +1,6 @@
 package bdd_models;
 
-import runner_utils.CustomAssert;
+import scenarios_utils.CustomAssert;
 
 public abstract class TestTarget <T extends GetController<CustomAssert>,
         R extends ActController<CustomAssert>, S extends VerifyController<CustomAssert>> implements IBDD<GetController<CustomAssert>,

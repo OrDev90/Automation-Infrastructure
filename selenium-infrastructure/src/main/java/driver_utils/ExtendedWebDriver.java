@@ -2,6 +2,8 @@ package driver_utils;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -13,6 +15,7 @@ public abstract class ExtendedWebDriver {
 
     @Getter
     protected WebDriver driver;
+    @Getter
     protected JavascriptExecutor js;
 
     protected WebDriverWait webDriverWait;
@@ -22,198 +25,218 @@ public abstract class ExtendedWebDriver {
 
     @Getter
     @Setter
-//    private String browserName;
     private CustomBy customBy;
+    private String currentTab;
 
     protected void initExtendedDriverTools(WebDriver webDriver) {
         this.driver = webDriver;
-        webDriverWait = new WebDriverWait(driver, 2);
+        webDriverWait = new WebDriverWait(driver, 5);
         js = (JavascriptExecutor) driver;
     }
 
-    public WebElement findWebElement(CustomBy givenElementAttribute) {
+    public String getUrl() {
+        return this.driver.getCurrentUrl();
+    }
+
+    public ImmutablePair<WebElement, Boolean> findWebElement(CustomBy givenElementAttribute) {
         try {
             Thread.sleep(SLEEP_BEFORE_ACTION);
             customBy = givenElementAttribute;
-            return webDriverWait.until(ExpectedConditions.presenceOfElementLocated(givenElementAttribute.getBy()));
+            return new ImmutablePair<>(webDriverWait.until(ExpectedConditions
+                    .presenceOfElementLocated(givenElementAttribute.getBy())), true);
         } catch (TimeoutException | InterruptedException e1) {
             e1.printStackTrace();
             try {
                 WebElement elementToFind = webDriverWait.until(ExpectedConditions
                         .presenceOfElementLocated(givenElementAttribute.getBy()));
                 js.executeScript("arguments[0].scrollIntoView(true);", elementToFind);
-                return elementToFind;
+                return new ImmutablePair<>(elementToFind, true);
             } catch (TimeoutException e2) {
                 e2.printStackTrace();
-                return null;
+                return new ImmutablePair<>(null, false);
             }
         }
     }
 
-    public WebElement findWebElement(CustomBy givenElementAttribute, WebElement fromElement) {
+    public ImmutablePair<WebElement, Boolean> findWebElement(CustomBy givenElementAttribute, WebElement fromElement) {
         try {
             Thread.sleep(SLEEP_BEFORE_ACTION);
             customBy = givenElementAttribute;
-            return fromElement.findElement(givenElementAttribute.getBy());
+            return new ImmutablePair<>(fromElement.findElement(givenElementAttribute.getBy()), true);
         } catch (TimeoutException | InterruptedException e1) {
             e1.printStackTrace();
             try {
                 WebElement elementToFind = webDriverWait.until(ExpectedConditions
                         .presenceOfNestedElementLocatedBy(fromElement, givenElementAttribute.getBy()));
                 js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});", elementToFind);
-                return elementToFind;
+                return new ImmutablePair<>(elementToFind, true);
             } catch (TimeoutException e2) {
                 e2.printStackTrace();
-                return null;
+                return new ImmutablePair<>(null, false);
             }
         }
     }
 
-    public List<WebElement> findWebElements(CustomBy givenElementAttribute) {
+    public ImmutablePair<List<WebElement>, Boolean> findWebElements(CustomBy givenElementAttribute) {
         try {
             Thread.sleep(SLEEP_BEFORE_ACTION);
             customBy = givenElementAttribute;
-            return webDriverWait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(givenElementAttribute.getBy()));
+            return new ImmutablePair<>(webDriverWait.until(ExpectedConditions
+                    .visibilityOfAllElementsLocatedBy(givenElementAttribute.getBy())), true);
         } catch (TimeoutException | InterruptedException e1) {
             e1.printStackTrace();
             try {
                 List<WebElement> elementsToFind = webDriverWait.until(ExpectedConditions
                         .presenceOfAllElementsLocatedBy(givenElementAttribute.getBy()));
                 js.executeScript("arguments[0].scrollIntoView(true);", elementsToFind.get(0));
-                return elementsToFind;
+                return new ImmutablePair<>(elementsToFind, true);
             } catch (TimeoutException e2) {
                 e2.printStackTrace();
-                return null;
+                return new ImmutablePair<>(null, false);
             }
         }
     }
 
-    public List<WebElement> findWebElements(CustomBy givenElementAttribute, WebElement fromElement) {
+    public ImmutablePair<List<WebElement>, Boolean> findWebElements(CustomBy givenElementAttribute, WebElement fromElement) {
         try {
             Thread.sleep(SLEEP_BEFORE_ACTION);
             customBy = givenElementAttribute;
-            return webDriverWait.until(ExpectedConditions
-                    .visibilityOfNestedElementsLocatedBy(fromElement, givenElementAttribute.getBy()));
+            return new ImmutablePair<>(webDriverWait.until(ExpectedConditions
+                    .visibilityOfNestedElementsLocatedBy(fromElement, givenElementAttribute.getBy())), true);
         } catch (TimeoutException | InterruptedException e1) {
             e1.printStackTrace();
             try {
                 List<WebElement> elementsToFind = webDriverWait.until(ExpectedConditions
                         .presenceOfAllElementsLocatedBy(givenElementAttribute.getBy()));
                 js.executeScript("arguments[0].scrollIntoView(true);", elementsToFind.get(0));
-                return elementsToFind;
+                return new ImmutablePair<>(elementsToFind, true);
             } catch (TimeoutException e2) {
                 e2.printStackTrace();
-                return null;
+                return new ImmutablePair<>(null, false);
             }
         }
     }
 
-    public String getTextFromElement(WebElement element) {
+    public ImmutablePair<String, Boolean> getTextFromElement(ImmutablePair<WebElement, Boolean> element) {
         try {
-            if (element == null)
-                return "";
-            return element.getText();
+            if (element.getKey() == null && !element.getValue())
+                return new ImmutablePair<>("", false);
+            assert element.getKey() != null;
+            return new ImmutablePair<>(element.getKey().getText(), true);
         } catch (Exception e1) {
             e1.printStackTrace();
             try {
-                return driver.findElement(customBy.getBy()).getText();
+                return new ImmutablePair<>(driver.findElement(customBy.getBy()).getText(), true);
             } catch (Exception e2) {
                 e2.printStackTrace();
-                return "";
+                return new ImmutablePair<>("", false);
             }
         }
     }
 
-    public String getTextFromElement(CustomBy givenElementAttribute) {
+    public ImmutablePair<String, Boolean> getTextFromElement(CustomBy givenElementAttribute) {
         return getTextFromElement(findWebElement(givenElementAttribute));
     }
 
-    public String getTextFromElement(CustomBy givenElementAttribute, WebElement fromElement) {
+    public ImmutablePair<String, Boolean> getTextFromElement(CustomBy givenElementAttribute, WebElement fromElement) {
         return getTextFromElement(findWebElement(givenElementAttribute, fromElement));
     }
 
-    public void clickOnElement(WebElement element) {
+    public Boolean clickOnElement(ImmutablePair<WebElement, Boolean> element) {
         try {
-            if (element != null)
-                element.click();
+            if (element.getKey() != null && element.getValue())
+                element.getKey().click();
                 Thread.sleep(SLEEP_AFTER_ACTION);
+                return true;
         } catch (Exception e1) {
             e1.printStackTrace();
             try {
-                if(isElementExists(customBy))
-                    driver.findElement(customBy.getBy()).click();
+                driver.findElement(customBy.getBy()).click();
+                Thread.sleep(SLEEP_AFTER_ACTION);
+                return true;
             } catch (Exception e2) {
                 e2.printStackTrace();
+                return false;
             }
         }
     }
 
-    public void clickOnElement(CustomBy givenElementAttribute) {
-        clickOnElement(findWebElement(givenElementAttribute));
+    public Boolean clickOnElement(CustomBy givenElementAttribute) {
+        return clickOnElement(findWebElement(givenElementAttribute));
     }
 
-    public void clickOnElement(CustomBy givenElementAttribute, WebElement fromElement) {
-        clickOnElement(findWebElement(givenElementAttribute, fromElement));
+    public Boolean clickOnElement(CustomBy givenElementAttribute, WebElement fromElement) {
+        return clickOnElement(findWebElement(givenElementAttribute, fromElement));
     }
 
-    public boolean isElementExists(WebElement element) {
+    public ImmutablePair<Boolean, Boolean> isElementExists(ImmutablePair<WebElement, Boolean> element) {
+        boolean isExists = false;
         try {
-            return element != null && element.isDisplayed();
+            if (element.getKey() != null && element.getValue())
+                isExists = element.getKey().isDisplayed();
+                return new ImmutablePair<>(isExists, true);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            return new ImmutablePair<>(isExists, false);
+        }
+    }
+
+    public ImmutablePair<Boolean, Boolean> isElementExists(CustomBy givenElementAttribute) {
+        return isElementExists(findWebElement(givenElementAttribute));
+    }
+
+    public ImmutablePair<Boolean, Boolean> isElementExists(CustomBy givenElementAttribute, WebElement fromElement) {
+        return isElementExists(findWebElement(givenElementAttribute, fromElement));
+    }
+
+    public Boolean sendKeysToElement(ImmutablePair<WebElement, Boolean> element, String keys) {
+        try {
+            if(element.getKey() != null && element.getValue())
+                element.getKey().sendKeys(keys);
+            return true;
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            try {
+                actions.sendKeys(element.getKey(), keys).perform();
+                return true;
+            } catch (Exception e2) {
+                e2.printStackTrace();
+                return false;
+            }
+        }
+    }
+
+    public Boolean sendKeysToElement(CustomBy givenElementAttribute, String keys) {
+        return sendKeysToElement(findWebElement(givenElementAttribute), keys);
+    }
+
+    public Boolean sendKeysToElement(CustomBy givenElementAttribute, WebElement fromElement, String keys) {
+        return sendKeysToElement(findWebElement(givenElementAttribute, fromElement), keys);
+    }
+
+    public Boolean clearElement(ImmutablePair<WebElement, Boolean> element) {
+        try {
+            if(element.getKey() != null && element.getValue())
+                element.getKey().clear();
+            return true;
         } catch (Exception e1) {
             e1.printStackTrace();
             return false;
         }
     }
 
-    public boolean isElementExists(CustomBy givenElementAttribute) {
-        return isElementExists(findWebElement(givenElementAttribute));
+    public Boolean clearElement(CustomBy givenElementAttribute) {
+        return clearElement(findWebElement(givenElementAttribute));
     }
 
-    public boolean isElementExists(CustomBy givenElementAttribute, WebElement fromElement) {
-        return isElementExists(findWebElement(givenElementAttribute, fromElement));
+    public Boolean clearElement(CustomBy givenElementAttribute, WebElement fromElement) {
+        return clearElement(findWebElement(givenElementAttribute, fromElement));
     }
 
-    public void sendKeysToElement(WebElement element, String keys) {
-        try {
-            if(element != null)
-                actions.sendKeys(element, keys).perform();
-        } catch (Exception e1) {
-            e1.printStackTrace();
-            try {
-                element.sendKeys(keys);
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        }
-    }
-
-    public void sendKeysToElement(CustomBy givenElementAttribute, String keys) {
-        sendKeysToElement(findWebElement(givenElementAttribute), keys);
-    }
-
-    public void sendKeysToElement(CustomBy givenElementAttribute, WebElement fromElement, String keys) {
-        sendKeysToElement(findWebElement(givenElementAttribute, fromElement), keys);
-    }
-
-    public void clearElement(WebElement element) {
-        try {
-            if(element != null)
-                element.clear();
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-    }
-
-    public void clearElement(CustomBy givenElementAttribute) {
-        clearElement(findWebElement(givenElementAttribute));
-    }
-
-    public void clearElement(CustomBy givenElementAttribute, WebElement fromElement) {
-        clearElement(findWebElement(givenElementAttribute, fromElement));
-    }
-
-    public void pressEscape() {
-        actions.sendKeys(Keys.ESCAPE).perform();
+    @SneakyThrows
+    public String executeJsScript(String script) {
+        Thread.sleep(SLEEP_BEFORE_ACTION);
+        return this.getJs().executeScript("return " + script).toString();
     }
 
     protected abstract void startService();
@@ -242,5 +265,22 @@ public abstract class ExtendedWebDriver {
             stopService();
             driver = null;
         }
+    }
+
+    public void changeFocusToOpenedTab() {
+        this.driver.switchTo().window((String) this.getDriver().getWindowHandles()
+                .toArray()[this.getDriver().getWindowHandles().size() - 1]);
+    }
+
+    public void closeLastTab() {
+        this.driver.close();
+    }
+
+    public void saveCurrentTabReference() {
+        this.currentTab = this.driver.getWindowHandle();
+    }
+
+    public void changeFocusToSavedTab() {
+        this.driver.switchTo().window(this.currentTab);
     }
 }

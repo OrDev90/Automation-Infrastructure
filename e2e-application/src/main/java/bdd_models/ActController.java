@@ -1,6 +1,6 @@
 package bdd_models;
 
-import runner_utils.CustomAssert;
+import scenarios_utils.CustomAssert;
 
 public class ActController<T extends CustomAssert> extends BDDController<T> {
 
