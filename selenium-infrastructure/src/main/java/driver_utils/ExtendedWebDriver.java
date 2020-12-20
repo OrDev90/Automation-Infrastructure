@@ -19,12 +19,11 @@ public abstract class ExtendedWebDriver {
     protected JavascriptExecutor js;
 
     protected WebDriverWait webDriverWait;
-    private Actions actions;
+    protected Actions actions;
 
     @Getter
     @Setter
     private CustomBy customBy;
-    private String currentTab;
 
     protected void initExtendedDriverTools(WebDriver webDriver) {
         this.driver = webDriver;
@@ -268,22 +267,5 @@ public abstract class ExtendedWebDriver {
             stopService();
             driver = null;
         }
-    }
-
-    public void changeFocusToOpenedTab() {
-        this.driver.switchTo().window((String) this.getDriver().getWindowHandles()
-                .toArray()[this.getDriver().getWindowHandles().size() - 1]);
-    }
-
-    public void closeLastTab() {
-        this.driver.close();
-    }
-
-    public void saveCurrentTabReference() {
-        this.currentTab = this.driver.getWindowHandle();
-    }
-
-    public void changeFocusToSavedTab() {
-        this.driver.switchTo().window(this.currentTab);
     }
 }

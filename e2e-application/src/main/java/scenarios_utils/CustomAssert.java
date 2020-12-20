@@ -15,7 +15,6 @@ import reporter.ExtentReporter;
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
-import java.util.List;
 
 public class CustomAssert {
 
@@ -66,6 +65,12 @@ public class CustomAssert {
         this.extentReporter.log(Status.FAIL, message, media);
     }
 
+    public void verifyUrl(String expectedUrl, String message) {
+        String actualUrl = this.driverManager.getUrl();
+        Boolean isSuccess = expectedUrl.contentEquals(actualUrl);
+        logToReport(isSuccess, message);
+    }
+
     public void click(WebElement element, String message) {
         Boolean isSuccess = this.driverManager.clickOnElement(new ImmutablePair<>(element, true));
         logToReport(isSuccess, message);
@@ -78,21 +83,6 @@ public class CustomAssert {
 
     public void click(CustomBy givenElementAttribute, WebElement fromElement, String message) {
         Boolean isSuccess = this.driverManager.clickOnElement(givenElementAttribute, fromElement);
-        logToReport(isSuccess, message);
-    }
-
-    public void verifyUrlInNewTab(String expectedUrl, String message) {
-        this.driverManager.changeFocusToOpenedTab();
-        String actualUrl = this.driverManager.getUrl();
-        this.driverManager.closeLastTab();
-        this.driverManager.changeFocusToSavedTab();
-        Boolean isSuccess = expectedUrl.contentEquals(actualUrl);
-        logToReport(isSuccess, message);
-    }
-
-    public void verifyUrl(String expectedUrl, String message) {
-        String actualUrl = this.driverManager.getUrl();
-        Boolean isSuccess = expectedUrl.contentEquals(actualUrl);
         logToReport(isSuccess, message);
     }
 
@@ -111,27 +101,6 @@ public class CustomAssert {
     public void verifyString(CustomBy givenElementAttribute, WebElement fromElement, String expectedString, String message) {
         String actualString = this.driverManager.getTextFromElement(givenElementAttribute, fromElement).getKey();
         Boolean isSuccess = expectedString.contentEquals(actualString);
-        logToReport(isSuccess, message);
-    }
-
-    public void verifyClassNameOfElementInPosition(CustomBy givenElementAttribute, int position, String expectedClassName, String message) {
-        ImmutablePair<List<WebElement>, Boolean> elementList = this.driverManager.findWebElements(givenElementAttribute);
-        String actualClassName = elementList.getKey().get(position).getAttribute("class");
-        Boolean isSuccess = elementList.getValue() && expectedClassName.contentEquals(actualClassName) ||
-                actualClassName.contains(expectedClassName);
-        logToReport(isSuccess, message);
-    }
-
-    public void verifyClassNameOfElementInPositionByAttribute(CustomBy givenElementAttribute, String attribute, int position,
-                                                              String expectedClassName, String message) {
-        boolean isSuccess = false;
-        ImmutablePair<List<WebElement>, Boolean> elementList = this.driverManager.findWebElements(givenElementAttribute);
-        for(WebElement element: elementList.getKey()) {
-            if(position == Integer.parseInt(element.getAttribute(attribute))) {
-                isSuccess = element.getAttribute("class").contains(expectedClassName);
-                break;
-            }
-        }
         logToReport(isSuccess, message);
     }
 
@@ -178,15 +147,5 @@ public class CustomAssert {
     public void clearText(CustomBy givenElementAttribute, WebElement fromElement, String message) {
         Boolean isSuccess = this.driverManager.clearElement(givenElementAttribute, fromElement);
         logToReport(isSuccess, message);
-    }
-
-    public void runJsScript(String script, String offset, String message) {
-        String actualOffset = this.driverManager.executeJsScript(script);
-        Boolean isSuccess = actualOffset.contentEquals(offset);
-        logToReport(isSuccess, message);
-    }
-
-    public void saveCurrentTabReference(String message) {
-        this.driverManager.saveCurrentTabReference();
     }
 }

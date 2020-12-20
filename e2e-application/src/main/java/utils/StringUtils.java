@@ -9,7 +9,6 @@ public class StringUtils {
 
     private static final Random random = new Random();
     private static final String[] illegalCharacters = {"~", "!", "@", "#","$", "%", "^", "&", "*", "(", ")", "-", "="};
-    private static final String[] phonePrefixes = {"050", "052", "053", "054"};
 
     public static String generateRandomNumberInLength(int length) {
         int min = (int) Math.pow(10, length - 1);
@@ -32,32 +31,5 @@ public class StringUtils {
 
     public static String generateRandomStringInLength(int length) {
         return new RandomString(length).nextString();
-    }
-
-    public static String generateInvalidEmailAtVersion() {
-        String randomStr = new RandomString(10).nextString();
-        String beforeStr = randomStr.substring(0, randomStr.length() / 2);
-        String afterStr = randomStr.substring(randomStr.length() / 2);
-        return beforeStr + "@" + afterStr;
-    }
-
-    public static String generateInvalidEmailSuffixVersion() {
-        return new RandomString(10).nextString() + ".com";
-    }
-
-    public static String generateRandomName() {
-        String randomStr = new RandomString(10).nextString();
-        String beforeStr = randomStr.substring(0, randomStr.length() / 2);
-        String afterStr = randomStr.substring(randomStr.length() / 2);
-        return beforeStr + " " + afterStr;
-    }
-
-    public static String generateRandomEmail() {
-        String randomStr = new RandomString(6).nextString();
-        return randomStr + "@gmail.com";
-    }
-
-    public static String generateRandomPhone() {
-        return phonePrefixes[random.nextInt(phonePrefixes.length)] + generateRandomNumberInLength(7);
     }
 }

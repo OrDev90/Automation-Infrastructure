@@ -2,12 +2,8 @@ package enums;
 
 public enum Url {
 
-    URL1("https://api.whatsapp.com/send?phone=972544945333"),
-    URL2("https://herolo.co.il/?lang=he"),
-    URL3("https://www.facebook.com/Herolofrontend"),
-    URL4("https://api.whatsapp.com/send?phone=972544945333"),
-    URL5("https://www.linkedin.com/company/herolo/"),
-    URL6("https://automation.herolo.co.il/");
+    URL1("https://www.google.com/?gws_rd=ssl"),
+    URL2("https://mail.google.com");
 
     private final String url;
 
