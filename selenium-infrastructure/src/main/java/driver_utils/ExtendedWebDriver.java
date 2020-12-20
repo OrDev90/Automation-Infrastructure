@@ -19,8 +19,6 @@ public abstract class ExtendedWebDriver {
     protected JavascriptExecutor js;
 
     protected WebDriverWait webDriverWait;
-    private final int SLEEP_BEFORE_ACTION = 200;
-    private final int SLEEP_AFTER_ACTION = 500;
     private Actions actions;
 
     @Getter
@@ -40,11 +38,13 @@ public abstract class ExtendedWebDriver {
 
     public ImmutablePair<WebElement, Boolean> findWebElement(CustomBy givenElementAttribute) {
         try {
-            Thread.sleep(SLEEP_BEFORE_ACTION);
+            WebElement elementToFind;
             customBy = givenElementAttribute;
-            return new ImmutablePair<>(webDriverWait.until(ExpectedConditions
-                    .presenceOfElementLocated(givenElementAttribute.getBy())), true);
-        } catch (TimeoutException | InterruptedException e1) {
+            elementToFind = webDriverWait.until(ExpectedConditions
+                    .presenceOfElementLocated(givenElementAttribute.getBy()));
+            js.executeScript("arguments[0].scrollIntoView(true);", elementToFind);
+            return new ImmutablePair<>(elementToFind, true);
+        } catch (TimeoutException e1) {
             e1.printStackTrace();
             try {
                 WebElement elementToFind = webDriverWait.until(ExpectedConditions
@@ -60,15 +60,17 @@ public abstract class ExtendedWebDriver {
 
     public ImmutablePair<WebElement, Boolean> findWebElement(CustomBy givenElementAttribute, WebElement fromElement) {
         try {
-            Thread.sleep(SLEEP_BEFORE_ACTION);
+            WebElement elementToFind;
             customBy = givenElementAttribute;
-            return new ImmutablePair<>(fromElement.findElement(givenElementAttribute.getBy()), true);
-        } catch (TimeoutException | InterruptedException e1) {
+            elementToFind = fromElement.findElement(givenElementAttribute.getBy());
+            js.executeScript("arguments[0].scrollIntoView(true);", elementToFind);
+            return new ImmutablePair<>(elementToFind, true);
+        } catch (TimeoutException e1) {
             e1.printStackTrace();
             try {
                 WebElement elementToFind = webDriverWait.until(ExpectedConditions
                         .presenceOfNestedElementLocatedBy(fromElement, givenElementAttribute.getBy()));
-                js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'nearest'});", elementToFind);
+                js.executeScript("arguments[0].scrollIntoView(true);", elementToFind);
                 return new ImmutablePair<>(elementToFind, true);
             } catch (TimeoutException e2) {
                 e2.printStackTrace();
@@ -79,11 +81,13 @@ public abstract class ExtendedWebDriver {
 
     public ImmutablePair<List<WebElement>, Boolean> findWebElements(CustomBy givenElementAttribute) {
         try {
-            Thread.sleep(SLEEP_BEFORE_ACTION);
+            List<WebElement> elementsToFind;
             customBy = givenElementAttribute;
-            return new ImmutablePair<>(webDriverWait.until(ExpectedConditions
-                    .visibilityOfAllElementsLocatedBy(givenElementAttribute.getBy())), true);
-        } catch (TimeoutException | InterruptedException e1) {
+            elementsToFind = webDriverWait.until(ExpectedConditions
+                    .visibilityOfAllElementsLocatedBy(givenElementAttribute.getBy()));
+            js.executeScript("arguments[0].scrollIntoView(true);", elementsToFind.get(0));
+            return new ImmutablePair<>(elementsToFind, true);
+        } catch (TimeoutException e1) {
             e1.printStackTrace();
             try {
                 List<WebElement> elementsToFind = webDriverWait.until(ExpectedConditions
@@ -99,11 +103,13 @@ public abstract class ExtendedWebDriver {
 
     public ImmutablePair<List<WebElement>, Boolean> findWebElements(CustomBy givenElementAttribute, WebElement fromElement) {
         try {
-            Thread.sleep(SLEEP_BEFORE_ACTION);
+            List<WebElement> elementsToFind;
             customBy = givenElementAttribute;
-            return new ImmutablePair<>(webDriverWait.until(ExpectedConditions
-                    .visibilityOfNestedElementsLocatedBy(fromElement, givenElementAttribute.getBy())), true);
-        } catch (TimeoutException | InterruptedException e1) {
+            elementsToFind = webDriverWait.until(ExpectedConditions
+                    .visibilityOfNestedElementsLocatedBy(fromElement, givenElementAttribute.getBy()));
+            js.executeScript("arguments[0].scrollIntoView(true);", elementsToFind.get(0));
+            return new ImmutablePair<>(elementsToFind, true);
+        } catch (TimeoutException e1) {
             e1.printStackTrace();
             try {
                 List<WebElement> elementsToFind = webDriverWait.until(ExpectedConditions
@@ -146,13 +152,11 @@ public abstract class ExtendedWebDriver {
         try {
             if (element.getKey() != null && element.getValue())
                 element.getKey().click();
-                Thread.sleep(SLEEP_AFTER_ACTION);
                 return true;
         } catch (Exception e1) {
             e1.printStackTrace();
             try {
                 driver.findElement(customBy.getBy()).click();
-                Thread.sleep(SLEEP_AFTER_ACTION);
                 return true;
             } catch (Exception e2) {
                 e2.printStackTrace();
@@ -235,7 +239,6 @@ public abstract class ExtendedWebDriver {
 
     @SneakyThrows
     public String executeJsScript(String script) {
-        Thread.sleep(SLEEP_BEFORE_ACTION);
         return this.getJs().executeScript("return " + script).toString();
     }
 

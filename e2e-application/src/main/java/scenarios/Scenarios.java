@@ -1,12 +1,13 @@
 package scenarios;
 
-import enums.Headline;
-import enums.Text;
 import enums.Url;
 import org.testng.annotations.Test;
 import scenarios_utils.TestBase;
 import utils.StringUtils;
 
+//TODO: add sleep parameters before and after as a non-mandatory pair.
+//TODO: go over all scenarios and verify they are not to long or complicated.
+//TODO: change the paths to the elements, use no class names but direct paths.
 public class Scenarios extends TestBase {
 
     @Test(description = "Validate home page url", groups = {"Sanity"})
@@ -35,37 +36,8 @@ public class Scenarios extends TestBase {
 
     @Test(description = "Validate all headlines and text", groups = {"Sanity"})
     public void scenario3() {
-        homePage.verify().thatHeadlineIsValid(Headline.HEADLINE1);
-        homePage.verify().thatHeadlineIsValid(Headline.HEADLINE2);
-        homePage.verify().thatHeadlineIsValid(Headline.HEADLINE3);
-        homePage.verify().thatHeadlineIsValid(Headline.HEADLINE4);
-        homePage.verify().thatHeadlineIsValid(Headline.HEADLINE5);
-        homePage.verify().thatHeadlineIsValid(Headline.HEADLINE6);
-        homePage.verify().thatHeadlineIsValid(Headline.HEADLINE7);
-        homePage.verify().thatHeadlineIsValid(Headline.HEADLINE8);
-        homePage.verify().thatHeadlineIsValid(Headline.HEADLINE9);
-        homePage.verify().thatHeadlineIsValid(Headline.HEADLINE10);
-        homePage.verify().thatHeadlineIsValid(Headline.HEADLINE11);
-        homePage.verify().thatHeadlineIsValid(Headline.HEADLINE12);
-        homePage.verify().thatHeadlineIsValid(Headline.HEADLINE13);
-        homePage.verify().thatHeadlineIsValid(Headline.HEADLINE14);
-        homePage.verify().thatHeadlineIsValid(Headline.HEADLINE15);
-        homePage.verify().thatHeadlineIsValid(Headline.HEADLINE16);
-        homePage.verify().thatHeadlineIsValid(Headline.HEADLINE17);
-        homePage.verify().thatTextIsValid(Text.TEXT1);
-        homePage.verify().thatTextIsValid(Text.TEXT2);
-        homePage.verify().thatTextIsValid(Text.TEXT3);
-        homePage.verify().thatTextIsValid(Text.TEXT4);
-        homePage.verify().thatTextIsValid(Text.TEXT5);
-        homePage.verify().thatTextIsValid(Text.TEXT6);
-        homePage.verify().thatTextIsValid(Text.TEXT7);
-        homePage.verify().thatTextIsValid(Text.TEXT8);
-        homePage.verify().thatTextIsValid(Text.TEXT9);
-        homePage.verify().thatTextIsValid(Text.TEXT10);
-        homePage.verify().thatTextIsValid(Text.TEXT11);
-        homePage.verify().thatTextIsValid(Text.TEXT12);
-        homePage.verify().thatTextIsValid(Text.TEXT13);
-        homePage.verify().thatTextIsValid(Text.TEXT14);
+        homePage.verify().thatAllHeadlinesAreValid();
+        homePage.verify().thatAllTextsAreValid();
     }
 
     @Test(description = "In example projects, verify that the first purple circle is selected, click right arrow, " +
