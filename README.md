@@ -4,6 +4,10 @@ The following repository contains an end-to-end automation infrastructure writte
 It also has Extent Reports framework capabilities.
 ## Scenarios
 1) Validate landing page url - Sanity.
+2) Insert text to search input and click 'Google Search' button, verify that search works - Sanity.
+3) Click Gmail Icon, verify the redirection to gmail landing page - Sanity.
+4) Click Gmail Icon, test tabs are working (Primary, Social, Promotions) - Sanity.
+5) Remove text from search input and click 'Google Search button, verify that search doesn't work - Negative.
 ## How to Run
 - Clone the project to your local repository.
 - Install all Maven dependencies as required.

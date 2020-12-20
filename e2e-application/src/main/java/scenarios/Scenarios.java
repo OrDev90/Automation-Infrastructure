@@ -6,7 +6,7 @@ import scenarios_utils.TestBase;
 
 public class Scenarios extends TestBase {
 
-    @Test(description = "Validate home page url", groups = {"Sanity"})
+    @Test(description = "Validate landing page url", groups = {"Sanity"})
     public void scenario1() {
         landingPage.verify().thatUrlIsCorrect(Url.URL1.getUrl());
     }
