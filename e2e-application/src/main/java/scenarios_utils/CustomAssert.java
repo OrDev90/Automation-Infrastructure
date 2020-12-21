@@ -148,4 +148,16 @@ public class CustomAssert {
         Boolean isSuccess = this.driverManager.clearElement(givenElementAttribute, fromElement);
         logToReport(isSuccess, message);
     }
+
+    public void verifyUrlContains(String substring, String message) {
+        String actualUrl = this.driverManager.getUrl();
+        Boolean isSuccess = actualUrl.contains(substring);
+        logToReport(isSuccess, message);
+    }
+
+    public void verifyUrlNotContains(String substring, String message) {
+        String actualUrl = this.driverManager.getUrl();
+        Boolean isSuccess = !actualUrl.contains(substring);
+        logToReport(isSuccess, message);
+    }
 }

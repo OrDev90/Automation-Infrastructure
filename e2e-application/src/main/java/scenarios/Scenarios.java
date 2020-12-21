@@ -13,21 +13,21 @@ public class Scenarios extends TestBase {
 
     @Test(description = "Insert text to search input and click 'Google Search' button, verify that search works", groups = {"Sanity"})
     public void scenario2() {
-
+        landingPage.act().insertTextToSearchField("Google");
+        landingPage.act().clickGoogleSearchButton();
+        landingPage.verify().thatSearchWorks();
     }
 
     @Test(description = "Click Gmail Icon, verify the redirection to gmail landing page", groups = {"Sanity"})
     public void scenario3() {
-
-    }
-
-    @Test(description = "Click Gmail Icon, test tabs are working (Primary, Social, Promotions)", groups = {"Sanity"})
-    public void scenario4() {
-
+        landingPage.act().clickGmailIcon();
+        landingPage.verify().thatUrlIsCorrect(Url.URL2.getUrl());
     }
 
     @Test(description = "Remove text from search input and click 'Google Search button, verify that search doesn't work", groups = {"Negative"})
-    public void scenario5() {
-
+    public void scenario4() {
+        landingPage.act().clearTextFromSearchField();
+        landingPage.act().clickGoogleSearchButton();
+        landingPage.verify().thatSearchIsDisabled();
     }
 }

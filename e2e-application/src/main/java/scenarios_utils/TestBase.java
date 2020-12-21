@@ -4,7 +4,6 @@ import driver_utils.DriverFactory;
 import driver_utils.ExtendedWebDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.*;
-import pages.gmailpage.GmailPage;
 import pages.landingpage.LandingPage;
 import reporter.ExtentReporter;
 import java.io.IOException;
@@ -15,7 +14,6 @@ public abstract class TestBase extends TestBaseUtils {
     protected ExtendedWebDriver driverManager;
     protected CustomAssert customAssert;
     protected LandingPage landingPage;
-    protected GmailPage gmailPage;
 
     @BeforeSuite
     public void beforeSuite(ITestContext context) {
@@ -53,7 +51,6 @@ public abstract class TestBase extends TestBaseUtils {
 
     private void initAllPages() {
         this.landingPage = new LandingPage(this.customAssert);
-        this.gmailPage = new GmailPage(this.customAssert);
     }
 
     private ExtendedWebDriver getTestDriverManager() {

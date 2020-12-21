@@ -32,6 +32,7 @@ public abstract class ExtendedWebDriver {
     }
 
     public String getUrl() {
+        this.waitTime(500);
         return this.driver.getCurrentUrl();
     }
 
@@ -241,6 +242,11 @@ public abstract class ExtendedWebDriver {
         return this.getJs().executeScript("return " + script).toString();
     }
 
+    public String getAttributeValue(String attribute, CustomBy givenElementAttribute) {
+        return (String) this.getJs().executeScript("return document.querySelector('"
+                + givenElementAttribute.getValue() + "').getAttribute('" + attribute + "')");
+    }
+
     protected abstract void startService();
     protected abstract void createDriver();
     protected abstract void stopService();
@@ -267,5 +273,10 @@ public abstract class ExtendedWebDriver {
             stopService();
             driver = null;
         }
+    }
+
+    @SneakyThrows
+    private void waitTime(long milliseconds) {
+        Thread.sleep(milliseconds);
     }
 }

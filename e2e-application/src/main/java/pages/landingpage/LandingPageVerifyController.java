@@ -12,4 +12,12 @@ public class LandingPageVerifyController extends VerifyController<CustomAssert> 
     public void thatUrlIsCorrect(String url) {
         customAssert().verifyUrl(url, "Verify that the current URL is: " + url);
     }
+
+    public void thatSearchWorks() {
+        customAssert().verifyUrlContains("search", "Verify that search works");
+    }
+
+    public void thatSearchIsDisabled() {
+        customAssert().verifyUrlNotContains("search", "Verify that search is disabled");
+    }
 }
